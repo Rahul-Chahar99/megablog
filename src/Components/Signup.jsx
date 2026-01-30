@@ -1,0 +1,116 @@
+import React from "react";
+import authService from "../appwrite/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Button, Input, Logo } from "./index";
+import { useForm } from "react-hook-form";
+import { login } from "../Store/authSlice";
+
+function Signup() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const { handleSubmit, register } = useForm();
+
+// The data parameter in create comes from React Hook Form.
+// Specifically, handleSubmit(create) collects the values from all inputs that are registered via register(...) and then passes them as a single object to your create function when the form is submitted and validation passes.
+// So on submit, data will look like:
+
+// {
+//   name: "Full Name typed by user",
+//   email: "user@example.com",
+//   password: "the-password"
+// }
+
+// You then pass this data to your backend/service:
+// const userData = await authService.createAccount(data);
+
+// Note: After createAccount, you fetch the current user and dispatch it to Redux:
+// const userData = await authService.getCurrentUser();
+// if (userData) dispatch(login(userData));
+// navigate("/");
+
+
+
+  const create = async (data) => {
+    setError("");
+    try {
+      const userData = await authService.createAccount(data);
+      if (userData) {
+        const userData = await authService.getCurrentUser();
+        if (userData) dispatch(login(userData));
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center">
+      <div
+        className={`mx-auto w-full max-w-lg bg-white rounded-xl p-10 border border-gray-300 shadow-sm`}
+      >
+        <div className="mb-2 flex justify-center">
+          <span className="inline-block w-full max-w-25">
+            <Logo width="100%" />
+          </span>
+        </div>
+        <h2 className="text-center text-2xl font-bold leading-tight">
+          Sign up to create account
+        </h2>
+        <p className="mt-2 text-center text-base text-black/60">
+          Already have an account?&nbsp;
+          <Link
+            to="/login"
+            className="font-medium text-primary transition-all duration-200 hover:underline"
+          >
+            Log In
+          </Link>
+        </p>
+        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+
+        <form onSubmit={handleSubmit(create)} className="mt-8">
+          <div className="space-y-5">
+            <Input
+              label="Full Name: "
+              placeholder="Enter Your Name"
+              {...register("name", { required: true })}
+            />
+            <Input
+              label="Email: "
+              placeholder="Enter Your Email"
+              type="email"
+              {...register("email", {
+                required: true,
+                validate: {
+                  matchPattern: (value) => {
+                    return (
+                      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                        value
+                      ) || "Email address must be a valid address"
+                    );
+                  },
+                },
+              })}
+            />
+            <Input
+              label="Password: "
+              placeholder="Enter Your Password"
+              type="password"
+              {...register("password", { required: true })}
+            />
+            <Button
+              children="Sign Up"
+              className="w-full"
+              type="submit"
+            ></Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;

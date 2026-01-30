@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Documentation</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Project Structure Documentation for 03MegaBlog_appWrite</h1>
+
+    <h2>Root Directory</h2>
+    <ul>
+        <li><code>.env</code> - Stores secret environment variables like Appwrite API keys and endpoints. This file is not committed to version control.</li>
+        <li><code>.env.sample</code> - An example file showing what variables are needed in <code>.env</code>.</li>
+        <li><code>.gitignore</code> - Specifies files and folders that Git should ignore (e.g., <code>node_modules</code>, <code>.env</code>).</li>
+        <li><code>index.html</code> - The main HTML entry point for the application, where the React app is mounted.</li>
+        <li><code>package.json</code> & <code>package-lock.json</code> - Manages project dependencies, metadata, and scripts (e.g., <code>dev</code>, <code>build</code>).</li>
+        <li><code>vite.config.js</code> - Configuration file for the Vite build tool and development server.</li>
+        <li><code>/public</code> - Contains static assets that are directly served, like favicons or images.</li>
+        <li><code>/src</code> - The main folder containing all the application's source code.</li>
+    </ul>
+
+    <hr>
+
+    <h2><code>/src</code> Directory</h2>
+    <p>This is where the core logic of the React application resides.</p>
+    <ul>
+        <li><code>main.jsx</code> - The entry point of the React application. It renders the root <code>App</code> component and wraps it with the Redux <code>Provider</code> and React Router.</li>
+        <li><code>App.jsx</code> - The main application component. It sets up the main layout (Header and Footer) and handles loading initial user data.</li>
+        <li><code>index.css</code> & <code>App.css</code> - Global and application-level stylesheets.</li>
+        
+        <li><h3><code>/appwrite</code></h3>
+            <ul>
+                <li><code>auth.js</code> - A service module for handling all Appwrite authentication logic (login, logout, signup, getting current user).</li>
+                <li><code>config.js</code> - A service module for handling all Appwrite database and storage logic (create/update/delete posts, file upload/preview/delete).</li>
+            </ul>
+        </li>
+
+        <li><h3><code>/Components</code></h3>
+            <ul>
+                <li>This directory holds all the reusable UI components of the application.</li>
+                <li><code>index.js</code> - Exports all components from this directory for cleaner, single-line imports elsewhere in the app.</li>
+                <li><code>RTE.jsx</code> - A Rich Text Editor component, which wraps the TinyMCE editor and integrates it with <code>react-hook-form</code>.</li>
+                <li><code>/Header</code>, <code>/Footer</code> - Components for the main site layout.</li>
+                <li><code>/Post-Form</code> - Contains the <code>PostForm.jsx</code> component used for creating and editing blog posts.</li>
+                <li>Other files like <code>Button.jsx</code>, <code>Input.jsx</code>, <code>Logo.jsx</code>, etc., are basic, reusable UI elements.</li>
+            </ul>
+        </li>
+
+        <li><h3><code>/conf</code></h3>
+            <ul>
+                <li><code>conf.js</code> - Exports a configuration object containing all environment variables (imported from <code>.env</code>). This provides a single, consistent source for configuration values like Appwrite URLs and project IDs.</li>
+            </ul>
+        </li>
+
+        <li><h3><code>/Pages</code></h3>
+            <ul>
+                <li>Contains components that represent full pages or views of the application (e.g., Home, Login, Signup, All Posts). These components often compose smaller UI components from the <code>/Components</code> directory to build the page.</li>
+            </ul>
+        </li>
+
+        <li><h3><code>/Store</code></h3>
+            <ul>
+                <li>This directory contains all the setup for Redux Toolkit, used for global state management.</li>
+                <li><code>authSlice.js</code> - A Redux "slice" that defines the state and reducers related to authentication (e.g., storing user data and login status).</li>
+                <li><code>Store.js</code> - The main Redux store configuration file, where all slices are combined.</li>
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>
